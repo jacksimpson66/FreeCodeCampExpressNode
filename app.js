@@ -26,3 +26,17 @@ const newItems = _.flattenDeep(items);
 console.log(newItems);
 
 //.gitignore should have /node_modules in it - as these files are massive
+//but, how will any one else use our code if the dependencies arent stored?
+//write npm install
+//this will install any dependencies in the package.json folder.
+
+//npm i <packageName> -D will install as a dev dependency (or --save-dev)
+//this will only be in use/shared for dev environments
+
+//scripts object in package.json allows us to declare dev runtimes and production
+//eg "start": "node app.js", when it is start you only need to say npm start
+//for "dev" script, you need to do npm run dev
+
+console.log("Hello World");
+
+//nodemon dependency allows for a hot refresh
