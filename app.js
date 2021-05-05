@@ -1,42 +1,73 @@
-//npm allows us to install packages as dependencies for projects
-//package is resuable code - folder of js code
-//modules/dependencies/package are used interchangeably at this level.
-//npm - anyone can publish anything. Use highly rated ones.  
+//async patterns
 
-//npm           global command, comes with node
-//npm --version     to check version
+//createServer callback function is asynchronous
+//if you perform some long, blocking code for , lets say, the /about url, any other user trying to access any other page will be blocked
+//from doing so until the blocking code has been executed
 
-//local dependency (only for this project)
-//npm i <packageName>
+//here is where promises come in (and async await)
 
-//global dependency (use for any project)
-//npm install -g <packageName> 
+const { readFile, writeFile } = require('fs');
+//these below, allow you to set up promise versions of the param function
+//replicates lines 17-28
+//need to pass both the path and the encoding to readFilePromise
 
-//package.json     stores important info about project / package
-//create manually by creating package.json in the root directory
-//npm init (step by step, press enter to skip)
-//npm init -y (everything default)
+const util = require('util');
+const readFilePromise = util.promisify(readFile)
+const writeFilePromise = util.promisify(writeFile)
 
-const _ = require('lodash');
+//async
+const getText = (path) => {
+    return new Promise((resolve, reject) => {
+        readFile(path, 'utf8', (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data);
+            }
+        });
+    })
+}
 
-const items = [1,[2,[3,[4]]]];
+getText('.\\content\\first.txt')
+    .then((result) => console.log(result))
+    .catch((err) => console.log(err));
 
-const newItems = _.flattenDeep(items);
+//to use promises, set up a function with whatever parammeters you need
+//within this function, return a promise function, that takes in a callback function with two params, resolve and reject.
+//execute code within this callback that is sync, and reject(err) or resolve(data)
+//when calling function, use .then (with function as callback) and then .catch (with function as parameter)
 
-console.log(newItems);
+//sync
+/* readFile('.\\content\\first.txt', 'utf8', (err, data) => {
+    if (err) {
+        return;
+    }
+    else {
+        console.log(data);
+    }
+}); */
 
-//.gitignore should have /node_modules in it - as these files are massive
-//but, how will any one else use our code if the dependencies arent stored?
-//write npm install
-//this will install any dependencies in the package.json folder.
+//async await syntax
 
-//npm i <packageName> -D will install as a dev dependency (or --save-dev)
-//this will only be in use/shared for dev environments
 
-//scripts object in package.json allows us to declare dev runtimes and production
-//eg "start": "node app.js", when it is start you only need to say npm start
-//for "dev" script, you need to do npm run dev
+//async await - set up function with async() as single parameter
+//in try, catch block - set up variables to hold the result of the getText function (that uses a promise) preceded by await
+//await causes the files to be read asynchronously
+//any errors from getText are logged in catch block
+//NOTE: getText function has been replaced by util.promisify version (readFilePromise)
+const start = async() => {
+    try {
+        const first = await readFilePromise('.\\content\\first.txt', 'utf8');
+        const second = await readFilePromise('.\\content\\second.txt', 'utf8');
+        await writeFilePromise('.\\content\\fifth.txt', `THIS IS: ${first} and ${second}`);
+        console.log(first, ' ',second);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
-console.log("Hello World");
+start();
 
-//nodemon dependency allows for a hot refresh
+//you can even use await before readFile and writeFile functions without needing to promisify them!
+//we will use this in the tutorial going forward!
