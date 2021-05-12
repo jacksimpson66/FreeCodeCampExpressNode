@@ -8,7 +8,7 @@
 
 const { readFile, writeFile } = require('fs');
 //these below, allow you to set up promise versions of the param function
-//replicates lines 17-28
+//replicates lines 19-30
 //need to pass both the path and the encoding to readFilePromise
 
 const util = require('util');
@@ -70,4 +70,9 @@ const start = async() => {
 start();
 
 //you can even use await before readFile and writeFile functions without needing to promisify them!
+//this is node's native async pattern
 //we will use this in the tutorial going forward!
+
+//this is achieved by:
+//const {readFile, writeFile} = require('fs').promises
+//allows you to use readFile and writeFile in async await

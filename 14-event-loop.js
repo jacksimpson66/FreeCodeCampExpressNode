@@ -36,7 +36,7 @@ setTimeout(() => {
 console.log('third'); */
 //readFile is synchronous which is offloaded to the kernel
 
-//setInterval for sync behaviour - setInterval runs code every x times where x is defined after callback
+//setInterval for async behaviour - setInterval runs code every x times where x is defined after callback
 /* setInterval(() => {
     console.log('hello world');
 },2000);
